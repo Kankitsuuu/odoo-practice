@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="hospital_patient_shelby_demo" model="hospital.patient" forcecreate="False">
+        <field name="name">Thomas Shelby</field>
+        <field name="age">37</field>
+        <field name="phone">+111 234 56 78</field>
+        <field name="email">thom_shl@gmail.com</field>
+        <field name="address">Lovell Street., Apt. 66</field>
+        <field name="gender">male</field>
+        <field name="doctor_id" ref="hospital_doctor_bill_demo"/>
+        <field name="disease_ids" eval="[Command.link(ref('hospital_disease_migraine_data'))]"/>
+    </record>
+
+    <record id="hospital_patient_hopkins_demo" model="hospital.patient" forcecreate="False">
+        <field name="name">Antony Hopkins</field>
+        <field name="age">23</field>
+        <field name="phone">+111 876 54 32</field>
+        <field name="email">antony_hope@gmail.com</field>
+        <field name="address">Round Street., Apt. 101</field>
+        <field name="gender">male</field>
+        <field name="doctor_id" ref="hospital_doctor_connors_demo"/>
+        <field name="disease_ids" eval="[Command.link(ref('hospital_disease_covid_data'))]"/>
+    </record>
+
+    <record id="hospital_patient_raquel_demo" model="hospital.patient" forcecreate="False">
+        <field name="name">Melissa Raquel</field>
+        <field name="age">34</field>
+        <field name="phone">+111 847 56 32</field>
+        <field name="email">melissa_wonderful@gmail.com</field>
+        <field name="address">Orange Street., Apt. 71</field>
+        <field name="gender">female</field>
+        <field name="doctor_id" ref="hospital_doctor_bill_demo"/>
+        <field name="disease_ids" eval="[Command.link(ref('hospital_disease_migraine_data')),
+         Command.link(ref('hospital_disease_bronchitis_data'))]"/>
+    </record>
+
+</odoo>

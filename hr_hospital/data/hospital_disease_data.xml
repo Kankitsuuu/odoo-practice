@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="hospital_disease_covid_data" model="hospital.disease">
+        <field name="name">Covid-19</field>
+        <field name="description">Covid description (symptoms)</field>
+    </record>
+
+    <record id="hospital_disease_bronchitis_data" model="hospital.disease">
+        <field name="name">Bronchitis</field>
+        <field name="description">Bronchitis description (symptoms)</field>
+    </record>
+
+    <record id="hospital_disease_migraine_data" model="hospital.disease">
+        <field name="name">Migraine</field>
+        <field name="description">Migraine description (symptoms)</field>
+    </record>
+
+</odoo>
