@@ -10,6 +10,7 @@
                     <group>
                         <field name="name"/>
                         <field name="description"/>
+                        <field name="parent_id"/>
                     </group>
                 </sheet>
             </form>
@@ -38,6 +39,6 @@
               name="Diseases"
               parent="menu_hospital_operations"
               action="action_hospital_disease"
-              sequence="10"/>
+              sequence="40"/>
 
 </odoo>

@@ -9,8 +9,13 @@
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="surname"/>
+                        <field name="photo"/>
                         <field name="gender"/>
-                        <field name="age"/>
+                        <field name="specialty"/>
+                        <field name="mentor_id"
+                               domain="[('mentor_id', '=', False), ('id', '!=', id)]"/>
+                        <field name="intern_ids"/>
                         <field name="phone"/>
                         <field name="email"/>
                         <field name="address"/>
@@ -26,7 +31,8 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
-                <field name="age"/>
+                <field name="surname"/>
+                <field name="specialty"/>
                 <field name="gender"/>
             </tree>
         </field>
@@ -43,6 +49,6 @@
               name="Doctors"
               parent="menu_hospital_operations"
               action="action_hospital_doctor"
-              sequence="10"/>
+              sequence="20"/>
 
 </odoo>

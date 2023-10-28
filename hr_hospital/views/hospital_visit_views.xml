@@ -11,6 +11,9 @@
                         <field name="date"/>
                         <field name="doctor_id"/>
                         <field name="patient_id"/>
+                        <field name="diagnosis_id"/>
+                        <field name="is_canceled"/>
+                        <field name="is_succeed"/>
                     </group>
                 </sheet>
             </form>
@@ -25,6 +28,8 @@
                 <field name="date"/>
                 <field name="doctor_id"/>
                 <field name="patient_id"/>
+                <field name="is_succeed"/>
+                <field name="is_canceled"/>
             </tree>
         </field>
     </record>
@@ -40,5 +45,5 @@
               name="Visits"
               parent="menu_hospital_operations"
               action="action_hospital_visit"
-              sequence="10"/>
+              sequence="30"/>
 </odoo>

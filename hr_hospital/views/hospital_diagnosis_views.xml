@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hospital_diagnosis_form" model="ir.ui.view">
+        <field name="name">hospital.diagnosis.form</field>
+        <field name="model">hospital.diagnosis</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="date"/>
+                        <field name="doctor_id"/>
+                        <field name="patient_id"/>
+                        <field name="disease_id"/>
+                        <field name="treatment"/>
+                    </group>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hospital_diagnosis_tree" model="ir.ui.view">
+        <field name="name">hospital.diagnosis.tree</field>
+        <field name="model">hospital.diagnosis</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date"/>
+                <field name="doctor_id"/>
+                <field name="patient_id"/>
+                <field name="disease_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hospital_diagnosis" model="ir.actions.act_window">
+            <field name="name">Diagnoses</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hospital.diagnosis</field>
+            <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_hospital_diagnoses"
+              name="Diagnoses"
+              parent="menu_hospital_operations"
+              action="action_hospital_diagnosis"
+              sequence="50"/>
+
+</odoo>
