@@ -1,7 +1,6 @@
-from typing import NoReturn, Union, Optional
+from typing import NoReturn, Optional
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-from odoo.models import BaseModel
 
 
 class HospitalDoctorSchedule(models.Model):
@@ -12,7 +11,8 @@ class HospitalDoctorSchedule(models.Model):
         comodel_name='hospital.doctor',
         required=True,
     )
-    date = fields.Date(
+    work_date = fields.Date(
+        string='Date',
         required=True,
     )
     start_time = fields.Float(
@@ -27,25 +27,25 @@ class HospitalDoctorSchedule(models.Model):
     )
 
     # Default methods
-    def name_get(self) -> list:
+    def name_get(self):
         data = []
         for rec in self:
             doctor = rec.doctor_id.surname
             data.append(
-                (rec.id, f'Doctor {doctor} {rec.date}')
+                (rec.id, f'Doctor {doctor} {rec.work_date}')
             )
         return data
 
     # CRUD methods
     @api.model
-    def create(self, vals_list) -> Union[BaseModel, NoReturn]:
-        self.check_time_conditions(vals_list)
-        return super(HospitalDoctorSchedule, self).create(vals_list)
+    def create(self, vals):
+        self.check_time_conditions(vals)
+        return super(HospitalDoctorSchedule, self).create(vals)
 
     # Custom methods
     def check_time_conditions(self, vals) -> Optional[NoReturn]:
-        terms = [
-            ('date', '=', vals['date']),
+        domain = [
+            ('work_date', '=', vals['work_date']),
             ('doctor_id', '=', vals['doctor_id'])
         ]
         start, end = vals['start_time'], vals['end_time']
@@ -53,7 +53,7 @@ class HospitalDoctorSchedule(models.Model):
         if not 0 <= start < end < 24:
             raise UserError(_('Wrong time data.'))
 
-        for record in self.search(terms):
+        for record in self.search(domain):
             conditions = [
                 record.start_time <= start <= record.end_time,
                 record.start_time <= end <= record.end_time,

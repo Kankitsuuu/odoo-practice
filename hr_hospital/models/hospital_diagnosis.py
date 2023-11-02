@@ -6,7 +6,7 @@ class HospitalDiagnosis(models.Model):
     _description = 'Hospital Diagnoses'
     _inherit = ['mail.thread']
 
-    date = fields.Date(
+    set_date = fields.Date(
         required=True,
     )
     doctor_id = fields.Many2one(
@@ -21,10 +21,15 @@ class HospitalDiagnosis(models.Model):
         comodel_name='hospital.disease',
         required=True,
     )
+    disease_category = fields.Char(
+        string='Disease Category',
+        related='disease_id.category_id.name',
+        store=True,
+    )
     treatment = fields.Text()
 
     # Default methods
-    def name_get(self) -> list:
+    def name_get(self):
         return [(
             rec.id, f'Patient {rec.patient_id.surname} - {rec.disease_id.name}'
         ) for rec in self

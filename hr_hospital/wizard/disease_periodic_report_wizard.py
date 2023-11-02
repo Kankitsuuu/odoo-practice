@@ -25,7 +25,7 @@ class DiseasePeriodicReportWizard(models.TransientModel):
     )
 
     # Action methods
-    def action_open_wizard(self) -> dict:
+    def action_open_wizard(self):
         return {
             'name': _('Disease Periodic Report Wizard'),
             'type': 'ir.actions.act_window',
@@ -36,13 +36,12 @@ class DiseasePeriodicReportWizard(models.TransientModel):
         }
 
     def action_get_report(self) -> dict:
-        """Call when button 'Get Report' clicked."""
         self.validate_data()
         data = {
             'form': {
                 'start_date': self.start_date,
                 'end_date': self.end_date,
-                'diseases': dict()
+                'diseases': {}
             }
         }
         for disease in self.disease_ids:
@@ -51,7 +50,6 @@ class DiseasePeriodicReportWizard(models.TransientModel):
                             ('date', '>=', self.start_date),
                             ('date', '<=', self.end_date)
                         ])
-            print(diagnoses_count)
             data['form']['diseases'][disease.name] = diagnoses_count
 
         # use `module_name.report_id` as reference
@@ -59,7 +57,6 @@ class DiseasePeriodicReportWizard(models.TransientModel):
 
     # Custom methods
     def validate_data(self) -> Optional[NoReturn]:
-        """Validate data from wizard"""
         if not self.disease_ids:
             raise UserError(_('You should choose at least one disease.'))
         elif not self.start_date < self.end_date <= datetime.today().date():

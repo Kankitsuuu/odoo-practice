@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="view_hospital_diagnosis_graph" model="ir.ui.view">
+        <field name="name">hospital.diagnosis.graph</field>
+        <field name="model">hospital.diagnosis</field>
+        <field name="arch" type="xml">
+           <graph type="bar">
+               <field name="set_date" interval="month"/>
+               <field name="disease_category"/>
+               <field name="doctor_id"/>
+           </graph>
+        </field>
+    </record>
+
+    <record id="view_hospital_diagnosis_pivot" model="ir.ui.view">
+        <field name="name">hospital.diagnosis.pivot</field>
+        <field name="model">hospital.diagnosis</field>
+        <field name="arch" type="xml">
+           <pivot display_quantity="1">
+               <field name="disease_category" type="row"/>
+               <field name="disease_id" type="row"/>
+               <field name="set_date" type="col" interval="year"/>
+               <field name="set_date" type="col" interval="month"/>
+           </pivot>
+        </field>
+    </record>
+
     <record id="view_hospital_diagnosis_form" model="ir.ui.view">
         <field name="name">hospital.diagnosis.form</field>
         <field name="model">hospital.diagnosis</field>
@@ -8,10 +33,11 @@
             <form>
                 <sheet>
                     <group>
-                        <field name="date"/>
+                        <field name="set_date"/>
                         <field name="doctor_id"/>
                         <field name="patient_id"/>
                         <field name="disease_id"/>
+                        <field name="disease_category"/>
                         <field name="treatment"/>
                     </group>
                     <div class="oe_chatter">
@@ -19,7 +45,6 @@
                         <field name="message_ids" widget="mail_thread"/>
                     </div>
                 </sheet>
-
             </form>
         </field>
     </record>
@@ -29,7 +54,7 @@
         <field name="model">hospital.diagnosis</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="date"/>
+                <field name="set_date"/>
                 <field name="doctor_id"/>
                 <field name="patient_id"/>
                 <field name="disease_id"/>
@@ -41,13 +66,13 @@
             <field name="name">Diagnoses</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">hospital.diagnosis</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,pivot,graph,form</field>
     </record>
 
     <menuitem id="menu_hospital_diagnoses"
               name="Diagnoses"
-              parent="menu_hospital_operations"
+              parent="menu_hospital_common"
               action="action_hospital_diagnosis"
-              sequence="50"/>
+              sequence="10"/>
 
 </odoo>

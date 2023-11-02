@@ -9,7 +9,7 @@ class PatientChangeVisitWizard(models.TransientModel):
     _name = 'patient.change.visit.wizard'
     _description = 'Wizard to change patient visit'
 
-    date = fields.Datetime()
+    visit_date = fields.Datetime()
     doctor_id = fields.Many2one(
         comodel_name='hospital.doctor',
     )
@@ -18,7 +18,7 @@ class PatientChangeVisitWizard(models.TransientModel):
         domain=[
             ('is_canceled', '=', False),
             ('is_succeed', '!=', True),
-            ('date', '>', fields.Datetime.now()),
+            ('set_date', '>', fields.Datetime.now()),
         ],
         required=True,
     )
@@ -28,23 +28,23 @@ class PatientChangeVisitWizard(models.TransientModel):
         if self.visit_id:
             if self.visit_id.is_canceled:
                 raise UserError(_('You cannot change data for canceled visits'))
-            elif self.visit_id.date < datetime.now():
+            elif self.visit_id.set_date < datetime.now():
                 raise UserError(_('You cannot change past visits.'))
             self.write({
                 'doctor_id': self.visit_id.doctor_id.id,
-                'date': self.visit_id.date
+                'visit_date': self.visit_id.set_date
             })
 
     # Action methods
     def action_open_wizard(self) -> dict:
-        context = {}
+        context = dict()
         if self.env.context.get('active_ids'):
             active_visit_id = self.env.context['active_ids'][0]
             visit_id = self.env['hospital.visit'].browse(active_visit_id)
             context = {
                 'default_visit_id': visit_id.id,
                 'default_doctor_id': visit_id.doctor_id.id,
-                'default_date': visit_id.date
+                'default_date': visit_id.set_date
             }
         data = {
             'name': _('Patient Change Visit Wizard'),
@@ -57,14 +57,10 @@ class PatientChangeVisitWizard(models.TransientModel):
         return data
 
     def action_change_visit(self) -> None:
-        vals = dict()
-        if self.date != self.visit_id.date:
-            print('Date changed')
-            print(self.date, self.visit_id.date)
-            vals['date'] = datetime.strftime(self.date, DATETIME_FORMAT)
+        vals = {}
+        if self.visit_date != self.visit_id.set_date:
+            vals['set_date'] = datetime.strftime(self.visit_date, DATETIME_FORMAT)
         if self.doctor_id != self.visit_id.doctor_id:
-            print('Doctor changed')
-            print(self.doctor_id, self.visit_id.doctor_id)
             vals['doctor_id'] = self.doctor_id.id
         if vals:
             self.visit_id.write(vals)

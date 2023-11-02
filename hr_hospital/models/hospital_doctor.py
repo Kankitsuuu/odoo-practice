@@ -7,7 +7,9 @@ class HospitalDoctor(models.Model):
     _description = 'Hospital Doctors'
     _inherit = 'hospital.person'
 
-    specialty = fields.Char()
+    specialty_id = fields.Many2one(
+        comodel_name='hospital.doctor.specialty',
+    )
     mentor_id = fields.Many2one(
         comodel_name='hospital.doctor',
     )
@@ -42,6 +44,18 @@ class HospitalDoctor(models.Model):
             elif self._origin.id == vals['mentor_id']:
                 raise UserError(_('You cannot choose yourself as mentor.'))
         return super(HospitalDoctor, self).write(vals)
+
+    # Action methods
+    def action_create_visit(self):
+        doctor_id = self.env.context.get('doctor_id')
+        return {
+            'name': _('New Visit'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'hospital.visit',
+            'target': 'new',
+            'context': {'default_doctor_id': doctor_id}
+        }
 
     # Custom methods
     def doctor_is_intern(self, rec_id: int) -> bool:

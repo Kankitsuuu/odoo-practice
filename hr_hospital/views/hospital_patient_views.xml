@@ -6,22 +6,54 @@
         <field name="model">hospital.patient</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button type="object" string="Visits" class="btn-primary" name="action_open_visits"/>
+                    <button type="object" string="Diagnoses" class="btn-success" name="action_open_diagnoses"/>
+                    <button type="object" string="Analyses" class="btn-info" name="action_open_analyses"/>
+                </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_create_visit"
+                                type="object"
+                                icon="fa-address-book"
+                                context="{'patient_id': id}">
+                            <span>New visit</span>
+                        </button>
+                    </div>
                     <group>
-                        <field name="name"/>
-                        <field name="surname"/>
-                        <field name="birthday_date"/>
-                        <field name="photo"/>
-                        <field name="passport"/>
-                        <field name="gender"/>
-                        <field name="age"/>
-                        <field name="phone"/>
-                        <field name="email"/>
-                        <field name="address"/>
-                        <field name="contact_person_id"/>
-                        <field name="doctor_id"/>
-                        <field name="disease_ids"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="surname"/>
+                            <field name="birthday_date"/>
+                            <field name="gender"/>
+                            <field name="age"/>
+                        </group>
+                        <group>
+                            <field name="photo" class="oe_avatar" widget="image"/>
+                        </group>
                     </group>
+                    <group>
+                        <group/>
+                        <group>
+                            <field name="passport"/>
+                            <field name="address"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="contact_person_id"/>
+                        </group>
+                    </group>
+                    <separator/>
+                    <group>
+                        <field name="doctor_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Doctor change history">
+                            <field name="doctor_change_ids" mode="tree"/>
+                        </page>
+                        <page string="Disease history">
+                            <field name="diagnosis_ids" mode="tree"/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -49,9 +81,9 @@
             <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_hospital_patients"
+    <menuitem id="menu_hospital_patients_patients"
               name="Patients"
-              parent="menu_hospital_operations"
+              parent="menu_hospital_patients"
               action="action_hospital_patient"
               sequence="10"/>
 

@@ -10,7 +10,7 @@
                     <field name="visit_id"/>
                 </group>
                 <group>
-                    <field name="date"/>
+                    <field name="visit_date"/>
                 </group>
                 <group>
                     <field name="doctor_id"/>
@@ -40,8 +40,8 @@
 
     <menuitem id="menu_patient_change_visit_wizard"
               name="Change patient visit"
-              parent="menu_hospital_operations"
+              parent="menu_hospital_common"
               action="server_action_patient_change_visit_wizard"
-              sequence="90"/>
+              sequence="30"/>
 
 </odoo>

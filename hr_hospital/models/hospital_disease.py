@@ -11,6 +11,10 @@ class HospitalDisease(models.Model):
     )
     description = fields.Text(
     )
+    category_id = fields.Many2one(
+        comodel_name='hospital.disease.category',
+        required=True,
+    )
     patient_ids = fields.Many2many(
         comodel_name='hospital.patient',
         string='Patients'
@@ -19,4 +23,9 @@ class HospitalDisease(models.Model):
         comodel_name='hospital.disease',
         string='Parent Disease',
         ondelete='cascade',
+    )
+    child_ids = fields.One2many(
+        comodel_name='hospital.disease',
+        inverse_name='parent_id',
+        readonly=True,
     )

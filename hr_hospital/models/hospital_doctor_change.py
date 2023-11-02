@@ -5,7 +5,8 @@ class HospitalDoctorChange(models.Model):
     _name = 'hospital.doctor.change'
     _description = 'Hospital history of changes supervising doctor'
 
-    time = fields.Datetime(
+    set_time = fields.Datetime(
+        string='Time',
         required=True,
         readonly=True,
     )
@@ -21,12 +22,12 @@ class HospitalDoctorChange(models.Model):
     )
 
     # Default methods
-    def name_get(self) -> list:
+    def name_get(self):
         data = []
         for rec in self:
             doctor = rec.doctor_id.surname
             patient = rec.patient_id.surname
-            date = rec.time.date()
+            date = rec.set_time.date()
             data.append(
                 (rec.id, f'{patient} - {doctor} {date}')
             )

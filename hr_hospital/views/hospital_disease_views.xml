@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="view_hospital_disease_search" model="ir.ui.view">
+        <field name="name">hospital.disease.search</field>
+        <field name="model">hospital.disease</field>
+        <field name="arch" type="xml">
+            <search>
+                <searchpanel>
+                    <field name="category_id"
+                           enable_counters="1"
+                           filter_domain="[('category_id', 'ilike', self)]"/>
+                    <field name="parent_id"
+                           hierarchize="1"
+                           enable_counters="1"
+                           filter_domain="[('name', 'ilike', self)]"/>
+                </searchpanel>
+                <filter name="category_id"
+                        string="Category"
+                        icon="terp-partner"
+                        context="{'group_by':'category_id'}"/>
+                <filter name="Child" domain="[('parent_id', '!=', False)]"/>
+
+           </search>
+        </field>
+    </record>
+
     <record id="view_hospital_disease_form" model="ir.ui.view">
         <field name="name">hospital.disease.form</field>
         <field name="model">hospital.disease</field>
@@ -10,6 +34,7 @@
                     <group>
                         <field name="name"/>
                         <field name="description"/>
+                        <field name="category_id"/>
                         <field name="parent_id"/>
                     </group>
                 </sheet>
@@ -23,22 +48,23 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
+                <field name="category_id" widget="badge"/>
                 <field name="description"/>
             </tree>
         </field>
     </record>
 
     <record id="action_hospital_disease" model="ir.actions.act_window">
-            <field name="name">Diseases</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">hospital.disease</field>
-            <field name="view_mode">tree,form</field>
+        <field name="name">Diseases</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hospital.disease</field>
+        <field name="view_mode">tree,form</field>
     </record>
 
     <menuitem id="menu_hospital_diseases"
               name="Diseases"
-              parent="menu_hospital_operations"
+              parent="menu_hospital_info"
               action="action_hospital_disease"
-              sequence="40"/>
+              sequence="10"/>
 
 </odoo>

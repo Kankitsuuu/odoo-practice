@@ -18,7 +18,7 @@
         <field name="email">doc_sara_connors@gmail.com</field>
         <field name="address">Flower Street., Apt. 54</field>
         <field name="gender">female</field>
-        <field name="specialty">Therapist</field>
+        <field name="specialty_id" ref="specialty_therapist"/>
     </record>
 
     <record id="doctor_jones_demo" model="hospital.doctor" forcecreate="True">
@@ -28,7 +28,7 @@
         <field name="email">doctor_jones@gmail.com</field>
         <field name="address">Regent Street., Apt. 12</field>
         <field name="gender">male</field>
-        <field name="specialty">Therapist</field>
+        <field name="specialty_id" ref="specialty_surgeon"/>
     </record>
 
 </odoo>

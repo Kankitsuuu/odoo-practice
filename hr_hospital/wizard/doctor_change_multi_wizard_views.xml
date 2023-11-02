@@ -6,13 +6,21 @@
         <field name="model">doctor.change.multi.wizard</field>
         <field name="arch" type="xml">
             <form>
-                <field name="patient_ids" options="{'no_create': True}"/>
+                <group>
+                    <field name="patient_id" options="{'no_create': True}"/>
+                </group>
                 <group>
                     <field name="doctor_id" options="{'no_create': True}"/>
                 </group>
                 <footer>
                     <button name="action_change_doctor"
                         string="Change"
+                        type="object"
+                        class="btn-primary"
+                        context="{'reopen': True}"
+                    />
+                    <button name="action_change_doctor"
+                        string="Change and close"
                         type="object"
                         class="btn-primary"
                     />

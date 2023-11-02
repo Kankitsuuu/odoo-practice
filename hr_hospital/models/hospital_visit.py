@@ -1,7 +1,8 @@
-from typing import NoReturn, Optional, Union
+from typing import NoReturn, Optional
+from pytz import timezone
 from odoo import models, fields, api, _
 from datetime import datetime, timedelta
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT as DATETIME_FORMAT
 
 
@@ -9,97 +10,107 @@ class HospitalVisit(models.Model):
     _name = 'hospital.visit'
     _description = 'Hospital Visits'
 
-    date = fields.Datetime(
+    set_date = fields.Datetime(
         string='Time',
         required=True,
     )
     is_canceled = fields.Boolean(
-        string='Canceled status',
+        string='Canceled',
         default=False,
     )
     is_succeed = fields.Boolean(
-        string='Success status',
+        string='Success',
     )
     patient_id = fields.Many2one(
         comodel_name='hospital.patient',
-        string='Patient',
         required=True,
     )
     doctor_id = fields.Many2one(
         comodel_name='hospital.doctor',
-        string='Doctor',
         required=True,
     )
     diagnosis_id = fields.Many2one(
         comodel_name='hospital.diagnosis',
-        string='Diagnosis',
     )
 
     # Default methods
-    def name_get(self) -> list:
-        return [
-            (rec.id, f'{rec.patient_id.surname} {rec.date.date()}') for rec in self
-        ]
+    def name_get(self):
+        data = []
+        for rec in self:
+            patient = rec.patient_id.surname
+            doctor = rec.doctor_id.surname
+            data.append(
+                (rec.id, f'{patient}-{doctor} {rec.set_date.date()}')
+            )
+        return data
 
     # Constraints and onchanges
-    @api.onchange('date', 'patient_id', 'doctor_id', 'diagnosis_id')
-    def _onchange_visit_data(self) -> Optional[NoReturn]:
-        if self.date and (datetime.now() > self.date):
-            raise UserError(_('You cannot change this field.'))
+    @api.constrains('date', 'patient_id', 'doctor_id', 'diagnosis_id')
+    def check_visit_data(self):
+        for visit in self:
+            if visit.set_date and (datetime.now() > visit.set_date):
+                raise ValidationError(_(
+                    'You cannot change this field.'
+                ))
 
     # CRUD methods
     @api.model
-    def create(self, vals_list):
-        print(self.patient_id.id)
-        visit_time = datetime.strptime(vals_list['date'], DATETIME_FORMAT)
-        doctor_id = vals_list['doctor_id']
+    def create(self, vals):
+        visit_time = datetime.strptime(vals['set_date'], DATETIME_FORMAT)
+        doctor_id = vals['doctor_id']
         self.check_time_exists(visit_time, doctor_id)
         self.check_doctor_schedule(visit_time, doctor_id)
-        return super(HospitalVisit, self).create(vals_list)
+        return super(HospitalVisit, self).create(vals)
 
-    def write(self, vals) -> Union[bool, NoReturn]:
+    def write(self, vals):
         if vals.get('patient_id'):
             raise UserError(_('You cannot change patient for visit.'))
 
-        elif vals.get('is_canceled') and self.is_succeed is True:
-            raise UserError(_('You cannot set canceled status for successful visit.'))
+        for visit in self:
+            if vals.get('is_canceled') and visit.is_succeed is True:
+                raise UserError(_('You cannot set canceled status for successful visit.'))
 
-        elif vals.get('date') or vals.get('doctor_id'):
-            visit_time = datetime.strptime(vals['date'], DATETIME_FORMAT) if vals.get('date') else self.date
-            doctor_id = vals['doctor_id'] if vals.get('doctor_id') else self.doctor_id.id
-            self.check_time_exists(visit_time, doctor_id)
-            self.check_doctor_schedule(self.date, doctor_id)
+            elif vals.get('set_date') or vals.get('doctor_id'):
+                visit_time = datetime.strptime(vals['set_date'], DATETIME_FORMAT) \
+                    if vals.get('set_date') else visit.set_date
+                doctor_id = vals['doctor_id'] if vals.get('doctor_id') else visit.doctor_id.id
+                self.check_time_exists(visit_time, doctor_id)
+                self.check_doctor_schedule(visit.set_date, doctor_id)
 
         return super(HospitalVisit, self).write(vals)
 
     def unlink(self):
         if self.diagnosis_id:
-            raise UserError(_('You cannot delete records with diagnosis.'))
+            raise UserError(_(
+                'You cannot delete records with diagnosis.'
+            ))
         return super(HospitalVisit, self).unlink()
 
     # Custom methods
+    @api.model
     def check_time_exists(self, visit_time: datetime, doctor_id: int) -> Optional[NoReturn]:
-        record = self.search([
-            ('date', '<=', visit_time + timedelta(minutes=15)),
-            ('date', '>=', visit_time - timedelta(minutes=15)),
+        visit = self.search([
+            ('set_date', '<=', visit_time + timedelta(minutes=15)),
+            ('set_date', '>=', visit_time - timedelta(minutes=15)),
             ('doctor_id', '=', doctor_id),
             ('patient_id', '!=', self.patient_id.id),
             ('is_canceled', '=', False)
         ])
-        if record:
+        if visit:
             raise UserError(_(
                 'An appointment for this time already exists.'
                 'Try to choose a different time.'
             ))
 
+    @api.model
     def check_doctor_schedule(self, visit_time: datetime, doctor_id: int) -> Optional[NoReturn]:
         visit_date = visit_time.date()
         doctor_schedules = self.env['hospital.doctor.schedule'].search([
             ('doctor_id', '=', doctor_id),
-            ('date', '=', visit_date)
+            ('work_date', '=', visit_date)
         ])
-        print(doctor_schedules)
         if doctor_schedules:
+            visit_time = visit_time.astimezone(timezone('Europe/Kyiv'))
             for schedule in doctor_schedules:
                 visit_time_value: float = visit_time.time().hour + visit_time.time().minute/60
                 if schedule.start_time <= visit_time_value <= schedule.end_time:

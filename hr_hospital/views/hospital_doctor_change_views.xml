@@ -8,7 +8,7 @@
             <form>
                 <sheet>
                     <group>
-                        <field name="time"/>
+                        <field name="set_time"/>
                         <field name="patient_id"/>
                         <field name="doctor_id"/>
                     </group>
@@ -22,7 +22,7 @@
         <field name="model">hospital.doctor.change</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="time"/>
+                <field name="set_time"/>
                 <field name="patient_id"/>
                 <field name="doctor_id"/>
             </tree>
@@ -38,8 +38,8 @@
 
     <menuitem id="menu_hospital_doctor_changes"
               name="Doctor changes"
-              parent="menu_hospital_operations"
+              parent="menu_hospital_patients"
               action="action_hospital_doctor_changes"
-              sequence="60"/>
+              sequence="40"/>
 
 </odoo>

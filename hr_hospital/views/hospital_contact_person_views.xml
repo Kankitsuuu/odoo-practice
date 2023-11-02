@@ -8,15 +8,28 @@
             <form>
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="surname"/>
-                        <field name="gender"/>
-                        <field name="phone"/>
-                        <field name="address"/>
-                        <field name="email"/>
-                        <field name="photo"/>
-                        <field name="patient_ids"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="surname"/>
+                            <field name="gender"/>
+                        </group>
+                        <group>
+                            <field name="photo" class="oe_avatar" widget="image"/>
+                        </group>
                     </group>
+                    <group>
+                        <group/>
+                        <group>
+                            <field name="address"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Patients" attrs="{'invisible': [('patient_ids', '=', [])]}">
+                            <field name="patient_ids" mode="tree"/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -44,8 +57,8 @@
 
     <menuitem id="menu_hospital_contact_persons"
               name="Contact persons"
-              parent="menu_hospital_operations"
+              parent="menu_hospital_contact"
               action="action_hospital_contact_persons"
-              sequence="80"/>
+              sequence="50"/>
 
 </odoo>
