@@ -18,8 +18,10 @@
     'depends': ['base', 'mail'],
     'data': [
         'security/ir.model.access.csv',
+        'data/hospital_disease_category_data.xml',
         'data/hospital_disease_data.xml',
         'data/hospital_doctor_specialty_data.xml',
+        'data/hospital_patient_analysis_category_data.xml',
         'views/hospital_menus.xml',
         'views/hospital_doctor_views.xml',
         'views/hospital_patient_views.xml',
@@ -38,8 +40,9 @@
         'wizard/disease_periodic_report_wizard_views.xml',
         'wizard/patient_change_visit_wizard_views.xml',
         'wizard/visit_create_wizard_views.xml',
+        'reports/paperformat_custom_report.xml',
         'reports/disease_periodic_report_template.xml',
-        'data/hospital_disease_data.xml',
+        # 'reports/hospital_doctor_report_template.xml',
     ],
 
     # only loaded in demonstration mode

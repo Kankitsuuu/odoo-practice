@@ -86,7 +86,7 @@ class HospitalPatient(models.Model):
         return {
             'name': _('Visits'),
             'type': 'ir.actions.act_window',
-            'view_mode': 'tree',
+            'view_mode': 'tree,form',
             'res_model': 'hospital.visit',
             'target': 'current',
         }
@@ -95,7 +95,7 @@ class HospitalPatient(models.Model):
         return {
             'name': _('Analyses'),
             'type': 'ir.actions.act_window',
-            'view_mode': 'tree',
+            'view_mode': 'tree,form',
             'res_model': 'hospital.patient.analysis',
             'target': 'current',
         }
@@ -104,7 +104,7 @@ class HospitalPatient(models.Model):
         return {
             'name': _('Diagnoses'),
             'type': 'ir.actions.act_window',
-            'view_mode': 'tree',
+            'view_mode': 'tree,form',
             'res_model': 'hospital.diagnosis',
             'target': 'current',
         }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="disease_category_viral" model="hospital.disease.category">
+        <field name="name">Viral</field>
+    </record>
+
+    <record id="disease_category_bacterial" model="hospital.disease.category">
+        <field name="name">Bacterial</field>
+    </record>
+
+    <record id="disease_category_common" model="hospital.disease.category">
+        <field name="name">Common</field>
+    </record>
+
+</odoo>

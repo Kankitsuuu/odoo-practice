@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="analysis_category_blood" model="hospital.patient.analysis.category">
+        <field name="name">Blood</field>
+    </record>
+
+    <record id="analysis_category_urine" model="hospital.patient.analysis.category">
+        <field name="name">Urine</field>
+    </record>
+
+</odoo>

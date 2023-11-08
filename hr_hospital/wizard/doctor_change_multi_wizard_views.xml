@@ -10,7 +10,7 @@
                     <field name="patient_id" options="{'no_create': True}"/>
                 </group>
                 <group>
-                    <field name="doctor_id" options="{'no_create': True}"/>
+                    <field name="doctor_id" options="{'no_create': True}" domain="[('patient_ids', 'not in', patient_id)]"/>
                 </group>
                 <footer>
                     <button name="action_change_doctor"
@@ -23,6 +23,7 @@
                         string="Change and close"
                         type="object"
                         class="btn-primary"
+                        context="{'reopen': False}"
                     />
                     <button special="cancel" class="oe_link" string="Close"/>
                 </footer>

@@ -26,5 +26,5 @@ class HospitalPerson(models.AbstractModel):
     )
 
     # Default methods
-    def name_get(self) -> list:
+    def name_get(self):
         return [(rec.id, f'{rec.name} {rec.surname}') for rec in self]

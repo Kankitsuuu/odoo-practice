@@ -18,27 +18,27 @@
 
     <menuitem id="menu_hospital_doctors"
               name="Doctors"
-              parent="menu_hospital_hospital"
+              parent="menu_hospital_root"
               sequence="10"/>
 
     <menuitem id="menu_hospital_patients"
               name="Patients"
-              parent="menu_hospital_hospital"
+              parent="menu_hospital_root"
               sequence="20"/>
 
     <menuitem id="menu_hospital_common"
               name="Common"
-              parent="menu_hospital_hospital"
+              parent="menu_hospital_root"
               sequence="30"/>
 
     <menuitem id="menu_hospital_info"
               name="Info"
-              parent="menu_hospital_hospital"
+              parent="menu_hospital_root"
               sequence="40"/>
 
     <menuitem id="menu_hospital_contact"
               name="Contact"
-              parent="menu_hospital_hospital"
+              parent="menu_hospital_root"
               sequence="50"/>
 
 </odoo>

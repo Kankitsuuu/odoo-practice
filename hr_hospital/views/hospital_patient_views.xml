@@ -7,46 +7,54 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button type="object" string="Visits" class="btn-primary" name="action_open_visits"/>
-                    <button type="object" string="Diagnoses" class="btn-success" name="action_open_diagnoses"/>
-                    <button type="object" string="Analyses" class="btn-info" name="action_open_analyses"/>
+                    <button type="object"
+                            string="New visit"
+                            class="btn-primary"
+                            icon="fa-plus"
+                            context="{'patient_id': id}"
+                            name="action_create_visit"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_create_visit"
+                        <button name="action_open_visits"
                                 type="object"
-                                icon="fa-address-book"
-                                context="{'patient_id': id}">
-                            <span>New visit</span>
+                                icon="fa-handshake-o">
+                            <span>Visits</span>
+                        </button>
+                        <button name="action_open_diagnoses"
+                                type="object"
+                                icon="fa-address-book">
+                            <span>Diagnoses</span>
+                        </button>
+                        <button name="action_open_analyses"
+                                type="object"
+                                icon="fa-address-card-o">
+                            <span>Analyses</span>
                         </button>
                     </div>
-                    <group>
+                    <field name="photo" class="oe_avatar" widget="image"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" required="1"/></h1>
+                        <label for="surname"/>
+                        <h1><field name="surname"/></h1>
                         <group>
-                            <field name="name"/>
-                            <field name="surname"/>
                             <field name="birthday_date"/>
-                            <field name="gender"/>
                             <field name="age"/>
+                            <field name="gender"/>
+                            <field name="doctor_id"/>
                         </group>
-                        <group>
-                            <field name="photo" class="oe_avatar" widget="image"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group/>
-                        <group>
-                            <field name="passport"/>
-                            <field name="address"/>
-                            <field name="phone"/>
-                            <field name="email"/>
-                            <field name="contact_person_id"/>
-                        </group>
-                    </group>
-                    <separator/>
-                    <group>
-                        <field name="doctor_id"/>
-                    </group>
+                    </div>
                     <notebook>
+                        <page string="Details">
+                            <group>
+                                <field name="passport"/>
+                                <field name="address"/>
+                                <field name="phone"/>
+                                <field name="email"/>
+                                <field name="contact_person_id"/>
+                            </group>
+                        </page>
                         <page string="Doctor change history">
                             <field name="doctor_change_ids" mode="tree"/>
                         </page>

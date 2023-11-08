@@ -41,3 +41,10 @@ class VisitCreateWizard(models.TransientModel):
             'doctor_id': self.doctor_id.id,
             'diagnosis_id': diagnosis_id
         })
+        return {
+            'name': _('New Visit'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'tree,form',
+            'res_model': 'hospital.visit',
+            'target': 'current',
+        }

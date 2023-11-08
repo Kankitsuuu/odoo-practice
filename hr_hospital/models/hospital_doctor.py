@@ -1,3 +1,5 @@
+import time
+
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
@@ -52,10 +54,20 @@ class HospitalDoctor(models.Model):
             'name': _('New Visit'),
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
-            'res_model': 'hospital.visit',
+            'res_model': 'visit.create.wizard',
             'target': 'new',
             'context': {'default_doctor_id': doctor_id}
         }
+
+    def action_get_report(self):
+        doctor_id = self.env.context['active_ids'][0]
+        doctor = self.env['hospital.doctor'].browse(doctor_id)
+        data = {
+            'doctor_name': f'{doctor.name} {doctor.surname}',
+            'doctor_specialty': doctor.specialty_id.name
+        }
+        # use `module_name.report_id` as reference
+        return self.env.ref('hr_hospital.doctor_report_id').report_action(self, data=data)
 
     # Custom methods
     def doctor_is_intern(self, rec_id: int) -> bool:

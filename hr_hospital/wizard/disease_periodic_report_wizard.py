@@ -47,8 +47,8 @@ class DiseasePeriodicReportWizard(models.TransientModel):
         for disease in self.disease_ids:
             diagnoses_count = self.env['hospital.diagnosis'].search_count([
                             ('disease_id', '=', disease.id),
-                            ('date', '>=', self.start_date),
-                            ('date', '<=', self.end_date)
+                            ('set_date', '>=', self.start_date),
+                            ('set_date', '<=', self.end_date)
                         ])
             data['form']['diseases'][disease.name] = diagnoses_count
 

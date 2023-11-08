@@ -1,3 +1,4 @@
+import pprint
 from typing import NoReturn, Optional
 from pytz import timezone
 from odoo import models, fields, api, _
@@ -45,8 +46,8 @@ class HospitalVisit(models.Model):
         return data
 
     # Constraints and onchanges
-    @api.constrains('date', 'patient_id', 'doctor_id', 'diagnosis_id')
-    def check_visit_data(self):
+    @api.onchange('date', 'patient_id', 'doctor_id', 'diagnosis_id')
+    def _onchange_visit_data(self):
         for visit in self:
             if visit.set_date and (datetime.now() > visit.set_date):
                 raise ValidationError(_(
@@ -110,7 +111,7 @@ class HospitalVisit(models.Model):
             ('work_date', '=', visit_date)
         ])
         if doctor_schedules:
-            visit_time = visit_time.astimezone(timezone('Europe/Kyiv'))
+            visit_time = visit_time.astimezone(timezone(self._context['tz']))
             for schedule in doctor_schedules:
                 visit_time_value: float = visit_time.time().hour + visit_time.time().minute/60
                 if schedule.start_time <= visit_time_value <= schedule.end_time:

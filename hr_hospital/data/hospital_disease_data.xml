@@ -4,16 +4,19 @@
     <record id="disease_covid" model="hospital.disease">
         <field name="name">Covid-19</field>
         <field name="description">Covid description (symptoms)</field>
+        <field name="category_id" ref="disease_category_viral"/>
     </record>
 
     <record id="disease_bronchitis" model="hospital.disease">
         <field name="name">Bronchitis</field>
         <field name="description">Bronchitis description (symptoms)</field>
+        <field name="category_id" ref="disease_category_viral"/>
     </record>
 
     <record id="disease_migraine" model="hospital.disease">
         <field name="name">Migraine</field>
         <field name="description">Migraine description (symptoms)</field>
+        <field name="category_id" ref="disease_category_common"/>
     </record>
 
 </odoo>

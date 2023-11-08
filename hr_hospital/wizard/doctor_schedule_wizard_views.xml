@@ -8,15 +8,22 @@
             <form>
                 <group>
                     <field name="doctor_id"/>
-                </group>
-                <group>
-                    <field name="schedules"/>
+                    <field name="work_date"/>
+                    <field name="from_time" widget="float_time"/>
+                    <field name="to_time" widget="float_time"/>
                 </group>
                 <footer>
                     <button name="action_set_time"
                         string="Set"
                         type="object"
                         class="btn-primary"
+                        context="{'reopen': True}"
+                    />
+                    <button name="action_set_time"
+                        string="Set and close"
+                        type="object"
+                        class="btn-primary"
+                        context="{'reopen': False}"
                     />
                     <button special="cancel" class="oe_link" string="Close"/>
                 </footer>

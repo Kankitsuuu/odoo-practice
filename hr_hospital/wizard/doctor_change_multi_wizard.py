@@ -36,3 +36,11 @@ class DoctorChangeMultiWizard(models.TransientModel):
         patient.write({'doctor_id': self.doctor_id.id})
         if self.env.context.get('reopen'):
             return self.action_open_wizard(reopen=True)
+        else:
+            return {
+                    'name': _('Change Supervising Doctor Wizard'),
+                    'type': 'ir.actions.act_window',
+                    'view_mode': 'tree,form',
+                    'res_model': 'hospital.doctor.change',
+                    'target': 'current',
+            }
