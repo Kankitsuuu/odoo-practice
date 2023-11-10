@@ -9,6 +9,12 @@ class HospitalDiagnosis(models.Model):
     set_date = fields.Date(
         required=True,
     )
+    level = fields.Selection(
+        selection=[('low', 'Low'),
+                   ('medium', 'Medium'),
+                   ('high', 'High'),],
+        default='low',
+    )
     doctor_id = fields.Many2one(
         comodel_name='hospital.doctor',
         required=True,

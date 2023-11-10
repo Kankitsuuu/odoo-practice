@@ -30,6 +30,10 @@ class HospitalPatient(models.Model):
         inverse_name='patient_id',
         string='Visits',
     )
+    visit_total = fields.Integer(
+        string='Visit count',
+        compute='_compute_visit_total',
+    )
     disease_ids = fields.Many2many(
         comodel_name='hospital.disease',
         string='Diseases',
@@ -44,6 +48,19 @@ class HospitalPatient(models.Model):
         inverse_name='patient_id',
         readonly=True,
     )
+    diagnosis_total = fields.Integer(
+        string='Diagnosis count',
+        compute='_compute_diagnosis_total',
+    )
+    analysis_ids = fields.One2many(
+        string='Analyses',
+        comodel_name='hospital.patient.analysis',
+        inverse_name='patient_id',
+    )
+    analysis_total = fields.Integer(
+        string='Analysis count',
+        compute='_compute_analysis_total',
+    )
 
     # Compute methods
     @api.depends('birthday_date')
@@ -56,6 +73,21 @@ class HospitalPatient(models.Model):
                 record.age = today.year - birthday.year - current
             else:
                 record.age = None
+
+    @api.depends('visit_ids')
+    def _compute_visit_total(self):
+        for patient in self:
+            patient.visit_total = len(patient.visit_ids)
+
+    @api.depends('diagnosis_ids')
+    def _compute_diagnosis_total(self):
+        for patient in self:
+            patient.diagnosis_total = len(patient.diagnosis_ids)
+
+    @api.depends('analysis_ids')
+    def _compute_analysis_total(self):
+        for patient in self:
+            patient.analysis_total = len(patient.analysis_ids)
 
     # CRUD methods
     @api.model
@@ -83,29 +115,36 @@ class HospitalPatient(models.Model):
 
     # Action methods
     def action_open_visits(self):
+        self.ensure_one()
         return {
             'name': _('Visits'),
             'type': 'ir.actions.act_window',
             'view_mode': 'tree,form',
             'res_model': 'hospital.visit',
+            'domain': [('id', 'in', self.visit_ids.ids)],
             'target': 'current',
         }
 
     def action_open_analyses(self):
+        self.ensure_one()
         return {
             'name': _('Analyses'),
             'type': 'ir.actions.act_window',
             'view_mode': 'tree,form',
             'res_model': 'hospital.patient.analysis',
+            'domain': [('id', 'in', self.analysis_ids.ids)],
             'target': 'current',
         }
 
     def action_open_diagnoses(self):
+        self.ensure_one()
+        print(self.diagnosis_ids.ids)
         return {
             'name': _('Diagnoses'),
             'type': 'ir.actions.act_window',
             'view_mode': 'tree,form',
             'res_model': 'hospital.diagnosis',
+            'domain': [('id', 'in', self.diagnosis_ids.ids)],
             'target': 'current',
         }
 

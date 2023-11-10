@@ -6,16 +6,6 @@
               web_icon="hospital,static/description/icon.png"
               sequence="10"/>
 
-    <menuitem id="menu_hospital_hospital"
-              name="Operations"
-              parent="menu_hospital_root"
-              sequence="10"/>
-
-    <menuitem id="menu_hospital_reports"
-              name="Reports"
-              parent="menu_hospital_root"
-              sequence="20"/>
-
     <menuitem id="menu_hospital_doctors"
               name="Doctors"
               parent="menu_hospital_root"
@@ -40,5 +30,11 @@
               name="Contact"
               parent="menu_hospital_root"
               sequence="50"/>
+
+    <menuitem id="menu_hospital_reports"
+              name="Reports"
+              parent="menu_hospital_root"
+              sequence="60"/>
+
 
 </odoo>

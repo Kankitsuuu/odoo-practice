@@ -38,6 +38,7 @@
                         <field name="patient_id"/>
                         <field name="disease_id"/>
                         <field name="disease_category"/>
+                        <field name="level"/>
                         <field name="treatment"/>
                     </group>
                 </sheet>

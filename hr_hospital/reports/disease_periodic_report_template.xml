@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record model="report.paperformat" id="paperformat_disease_report">
+            <field name="name">A4 Paper format for report</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">30</field>
+            <field name="margin_right">5</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">30</field>
+            <field name="dpi">90</field>
+    </record>
+
     <record id="disease_report_id" model="ir.actions.report">
         <field name="name">Disease Periodic Report</field>
         <field name="model">disease.periodic.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">hr_hospital.disease_periodic_report_template</field>
         <field name="report_file">hr_hospital.disease_periodic_report_template</field>
-        <field name="paperformat_id" ref="hr_hospital.paperformat_custom_report"/>
+        <field name="paperformat_id" ref="hr_hospital.paperformat_disease_report"/>
         <field name="print_report_name">'Disease Periodic Report'</field>
     </record>
 

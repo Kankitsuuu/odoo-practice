@@ -1,6 +1,5 @@
 from datetime import datetime
 from odoo import models, fields, _, api
-from odoo.exceptions import UserError
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT as DATE_FORMAT
 
 
@@ -72,5 +71,5 @@ class DoctorScheduleWizard(models.TransientModel):
         try:
             datetime.strptime(date, DATE_FORMAT)
             return True
-        except:
+        except Exception:
             return False

@@ -1,4 +1,3 @@
-import pprint
 from typing import NoReturn, Optional
 from pytz import timezone
 from odoo import models, fields, api, _

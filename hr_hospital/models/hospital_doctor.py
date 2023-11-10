@@ -1,7 +1,5 @@
-import time
-
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import ValidationError
 
 
 class HospitalDoctor(models.Model):
@@ -26,26 +24,40 @@ class HospitalDoctor(models.Model):
         inverse_name='doctor_id',
         string='Patients',
     )
+    patient_total = fields.Integer(
+        string='Patient count',
+        compute='_compute_patient_total',
+    )
     visit_ids = fields.One2many(
         comodel_name='hospital.visit',
         inverse_name='doctor_id',
         string='Visits',
     )
+    visit_total = fields.Integer(
+        string='Visit count',
+        compute='_compute_visit_total'
+    )
 
-    # CRUD methods
-    @api.model
-    def create(self, vals):
-        if vals.get('mentor_id') and self.doctor_is_intern(vals['mentor_id']):
-            raise UserError(_('You cannot choose intern as mentor.'))
-        return super(HospitalDoctor, self).create(vals)
+    # Compute methods
+    @api.depends('patient_ids')
+    def _compute_patient_total(self):
+        for doctor in self:
+            doctor.patient_total = len(doctor.patient_ids)
 
-    def write(self, vals):
-        if vals.get('mentor_id'):
-            if self.doctor_is_intern(vals['mentor_id']):
-                raise UserError(_('You cannot choose intern as mentor.'))
-            elif self._origin.id == vals['mentor_id']:
-                raise UserError(_('You cannot choose yourself as mentor.'))
-        return super(HospitalDoctor, self).write(vals)
+    @api.depends('visit_ids')
+    def _compute_visit_total(self):
+        for doctor in self:
+            doctor.visit_total = len(doctor.visit_ids)
+
+    # Constraints
+    @api.constrains('mentor_id')
+    def check_mentor_id(self):
+        for doctor in self:
+            mentor = doctor.mentor_id
+            if mentor.id == doctor.id:
+                raise ValidationError(_('You cannot choose yourself as mentor.'))
+            elif mentor.mentor_id:
+                raise ValidationError(_('You cannot choose intern as mentor.'))
 
     # Action methods
     def action_create_visit(self):
@@ -59,19 +71,25 @@ class HospitalDoctor(models.Model):
             'context': {'default_doctor_id': doctor_id}
         }
 
-    def action_get_report(self):
-        doctor_id = self.env.context['active_ids'][0]
-        doctor = self.env['hospital.doctor'].browse(doctor_id)
-        data = {
-            'doctor_name': f'{doctor.name} {doctor.surname}',
-            'doctor_specialty': doctor.specialty_id.name
+    # Action methods
+    def action_open_patients(self):
+        self.ensure_one()
+        return {
+            'name': _('Patients'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'tree,form',
+            'res_model': 'hospital.patient',
+            'domain': [('id', 'in', self.patient_ids.ids)],
+            'target': 'current',
         }
-        # use `module_name.report_id` as reference
-        return self.env.ref('hr_hospital.doctor_report_id').report_action(self, data=data)
 
-    # Custom methods
-    def doctor_is_intern(self, rec_id: int) -> bool:
-        record = self.browse(rec_id)
-        if record.mentor_id:
-            return True
-        return False
+    def action_open_visits(self):
+        self.ensure_one()
+        return {
+            'name': _('Visits'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'tree,form',
+            'res_model': 'hospital.visit',
+            'domain': [('id', 'in', self.visit_ids.ids)],
+            'target': 'current',
+        }

@@ -19,17 +19,17 @@
                         <button name="action_open_visits"
                                 type="object"
                                 icon="fa-handshake-o">
-                            <span>Visits</span>
+                            <field string="Visits" name="visit_total" widget="statinfo"/>
                         </button>
                         <button name="action_open_diagnoses"
                                 type="object"
                                 icon="fa-address-book">
-                            <span>Diagnoses</span>
+                            <field string="Diagnoses" name="diagnosis_total" widget="statinfo"/>
                         </button>
                         <button name="action_open_analyses"
                                 type="object"
                                 icon="fa-address-card-o">
-                            <span>Analyses</span>
+                            <field string="Analyses" name="analysis_total" widget="statinfo"/>
                         </button>
                     </div>
                     <field name="photo" class="oe_avatar" widget="image"/>

@@ -40,9 +40,9 @@
         'wizard/disease_periodic_report_wizard_views.xml',
         'wizard/patient_change_visit_wizard_views.xml',
         'wizard/visit_create_wizard_views.xml',
-        'reports/paperformat_custom_report.xml',
+        'wizard/doctor_report_wizard_views.xml',
         'reports/disease_periodic_report_template.xml',
-        # 'reports/hospital_doctor_report_template.xml',
+        'reports/hospital_doctor_report_template.xml',
     ],
 
     # only loaded in demonstration mode
