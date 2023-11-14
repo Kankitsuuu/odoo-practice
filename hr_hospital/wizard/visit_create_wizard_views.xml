@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="visit_create_wizard_view_form" model="ir.ui.view">
+        <field name="name">visit.create.wizard.view.form</field>
+        <field name="model">visit.create.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="set_date"/>
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <field name="diagnosis_id" domain="[('patient_id', '=', patient_id)]"/>
+                </group>
+                <footer>
+                    <button name="action_create_visit"
+                        string="Create"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button special="cancel" class="oe_link" string="Close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="server_action_visit_create_wizard" model="ir.actions.server">
+        <field name="name">New visit</field>
+        <field name="model_id" ref="model_visit_create_wizard"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.action_open_wizard()
+        </field>
+    </record>
+
+
+    <menuitem id="menu_visit_create_wizard"
+              name="New visit"
+              parent="menu_hospital_patients"
+              action="server_action_visit_create_wizard"
+              sequence="30"/>
+
+</odoo>

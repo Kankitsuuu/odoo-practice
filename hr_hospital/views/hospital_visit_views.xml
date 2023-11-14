@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="view_hospital_visit_calendar" model="ir.ui.view">
+       <field name="name">hospital.visit.calendar</field>
+       <field name="model">hospital.visit</field>
+       <field eval="2" name="priority"/>
+       <field name="arch" type="xml">
+           <calendar date_start="set_date"
+                     string="Visits schedule"
+                     mode="week"
+                     color="doctor_id"
+                     delete="False"
+                     event_open_popup="1">
+               <field name="set_date"/>
+               <field name="is_canceled"/>
+               <field name="is_succeed"/>
+           </calendar>
+       </field>
+    </record>
+
     <record id="view_hospital_visit_form" model="ir.ui.view">
         <field name="name">hospital.visit.form</field>
         <field name="model">hospital.visit</field>
@@ -8,9 +26,12 @@
             <form>
                 <sheet>
                     <group>
-                        <field name="date"/>
+                        <field name="set_date"/>
                         <field name="doctor_id"/>
                         <field name="patient_id"/>
+                        <field name="diagnosis_id"/>
+                        <field name="is_canceled"/>
+                        <field name="is_succeed"/>
                     </group>
                 </sheet>
             </form>
@@ -22,9 +43,11 @@
         <field name="model">hospital.visit</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="date"/>
+                <field name="set_date"/>
                 <field name="doctor_id"/>
                 <field name="patient_id"/>
+                <field name="is_succeed"/>
+                <field name="is_canceled"/>
             </tree>
         </field>
     </record>
@@ -33,12 +56,12 @@
             <field name="name">Visits</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">hospital.visit</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,calendar,form</field>
     </record>
 
     <menuitem id="menu_hospital_visits"
               name="Visits"
-              parent="menu_hospital_operations"
+              parent="menu_hospital_common"
               action="action_hospital_visit"
-              sequence="10"/>
+              sequence="20"/>
 </odoo>

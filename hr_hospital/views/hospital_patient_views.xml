@@ -1,21 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
     <record id="view_hospital_patient_form" model="ir.ui.view">
         <field name="name">hospital.patient.form</field>
         <field name="model">hospital.patient</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button type="object"
+                            string="New visit"
+                            class="btn-primary"
+                            icon="fa-plus"
+                            context="{'patient_id': id}"
+                            name="action_create_visit"/>
+                </header>
                 <sheet>
-                    <group>
-                        <field name="name"/>
-                        <field name="gender"/>
-                        <field name="age"/>
-                        <field name="phone"/>
-                        <field name="email"/>
-                        <field name="address"/>
-                        <field name="doctor_id"/>
-                        <field name="disease_ids"/>
-                    </group>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_visits"
+                                type="object"
+                                icon="fa-handshake-o">
+                            <field string="Visits" name="visit_total" widget="statinfo"/>
+                        </button>
+                        <button name="action_open_diagnoses"
+                                type="object"
+                                icon="fa-address-book">
+                            <field string="Diagnoses" name="diagnosis_total" widget="statinfo"/>
+                        </button>
+                        <button name="action_open_analyses"
+                                type="object"
+                                icon="fa-address-card-o">
+                            <field string="Analyses" name="analysis_total" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <field name="photo" class="oe_avatar" widget="image"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" required="1"/></h1>
+                        <label for="surname"/>
+                        <h1><field name="surname"/></h1>
+                        <group>
+                            <field name="birthday_date"/>
+                            <field name="age"/>
+                            <field name="gender"/>
+                            <field name="doctor_id"/>
+                        </group>
+                    </div>
+                    <notebook>
+                        <page string="Details">
+                            <group>
+                                <field name="passport"/>
+                                <field name="address"/>
+                                <field name="phone"/>
+                                <field name="email"/>
+                                <field name="contact_person_id"/>
+                            </group>
+                        </page>
+                        <page string="Doctor change history">
+                            <field name="doctor_change_ids" mode="tree"/>
+                        </page>
+                        <page string="Disease history">
+                            <field name="diagnosis_ids" mode="tree"/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -27,8 +73,10 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
+                <field name="surname"/>
                 <field name="age"/>
                 <field name="gender"/>
+                <field name="contact_person_id"/>
                 <field name="doctor_id"/>
             </tree>
         </field>
@@ -41,9 +89,9 @@
             <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_hospital_patients"
+    <menuitem id="menu_hospital_patients_patients"
               name="Patients"
-              parent="menu_hospital_operations"
+              parent="menu_hospital_patients"
               action="action_hospital_patient"
               sequence="10"/>
 

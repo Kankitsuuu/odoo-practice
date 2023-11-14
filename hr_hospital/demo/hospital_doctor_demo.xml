@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
-    <record id="hospital_doctor_bill_demo" model="hospital.doctor" forcecreate="True">
-        <field name="name">Andrews Bill</field>
-        <field name="age">45</field>
+
+    <record id="doctor_bill_demo" model="hospital.doctor" forcecreate="True">
+        <field name="name">Andrews</field>
+        <field name="surname">Bill</field>
         <field name="phone">+111 222 33 44</field>
         <field name="email">doctor_andrews@gmail.com</field>
         <field name="address">Highhill Street., Apt. 20</field>
         <field name="gender">male</field>
+        <field name="specialty_id" ref="specialty_therapist"/>
     </record>
 
-    <record id="hospital_doctor_connors_demo" model="hospital.doctor" forcecreate="True">
-        <field name="name">Sara Connors</field>
-        <field name="age">37</field>
+    <record id="doctor_connors_demo" model="hospital.doctor" forcecreate="True">
+        <field name="name">Sara</field>
+        <field name="surname">Connors</field>
         <field name="phone">+111 333 44 55</field>
         <field name="email">doc_sara_connors@gmail.com</field>
         <field name="address">Flower Street., Apt. 54</field>
         <field name="gender">female</field>
+        <field name="specialty_id" ref="specialty_therapist"/>
     </record>
 
-    <record id="hospital_doctor_jones_demo" model="hospital.doctor" forcecreate="True">
-        <field name="name">John Jones</field>
-        <field name="age">54</field>
+    <record id="doctor_jones_demo" model="hospital.doctor" forcecreate="True">
+        <field name="name">John</field>
+        <field name="surname">Jones</field>
         <field name="phone">+111 999 88 77</field>
         <field name="email">doctor_jones@gmail.com</field>
         <field name="address">Regent Street., Apt. 12</field>
         <field name="gender">male</field>
+        <field name="mentor_id" ref="doctor_bill_demo"/>
+        <field name="specialty_id" ref="specialty_surgeon"/>
     </record>
+
 </odoo>

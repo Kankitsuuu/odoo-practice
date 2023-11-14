@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="disease_bacterial_bronchitis_demo" model="hospital.disease">
+        <field name="name">Bacterial bronchitis</field>
+        <field name="description">Bacterial bronchitis (symptoms)</field>
+        <field name="category_id" ref="disease_category_bacterial"/>
+        <field name="parent_id" ref="disease_bronchitis"/>
+    </record>
+
+    <record id="disease_allergic_bronchitis_demo" model="hospital.disease">
+        <field name="name">Allergic bronchitis</field>
+        <field name="description">Allergic bronchitis (symptoms)</field>
+        <field name="category_id" ref="disease_category_viral"/>
+        <field name="parent_id" ref="disease_bronchitis"/>
+    </record>
+
+    <record id="disease_covid_delta_demo" model="hospital.disease">
+        <field name="name">Covid-19 (delta)</field>
+        <field name="description">Delta strain (symptoms)</field>
+        <field name="category_id" ref="disease_category_viral"/>
+        <field name="parent_id" ref="disease_covid"/>
+    </record>
+
+    <record id="disease_covid_omicron_demo" model="hospital.disease" forcecreate="False">
+        <field name="name">Covid-19 (omicron)</field>
+        <field name="description">Omicron strain (symptoms)</field>
+        <field name="category_id" ref="disease_category_viral"/>
+        <field name="parent_id" ref="disease_covid"/>
+    </record>
+
+</odoo>

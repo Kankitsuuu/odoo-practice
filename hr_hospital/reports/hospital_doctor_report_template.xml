@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="report.paperformat" id="paperformat_doctor_report">
+            <field name="name">A4 Paper format for report</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">55</field>
+            <field name="margin_right">5</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">50</field>
+            <field name="dpi">90</field>
+    </record>
+
+    <record id="doctor_report_id" model="ir.actions.report">
+        <field name="name">Doctor Report</field>
+        <field name="model">hospital.doctor</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_hospital.doctor_report_template</field>
+        <field name="report_file">hr_hospital.doctor_report_template</field>
+        <field name="paperformat_id" ref="hr_hospital.paperformat_doctor_report"/>
+    </record>
+
+    <template id="doctor_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <!-- Report Header -->
+                <div class="header">
+                    <div class="row">
+                        <div class="col-12 mb4 text-end">
+                            <img t-if="res_company.logo"
+                                 t-att-src="image_data_uri(res_company.logo)"
+                                 style="max-height: 45px;"
+                                 alt="Logo"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div style="border-bottom: 1px solid black;"/>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-12 text-end">
+                            <p class="mt-0">
+                                <t t-esc="res_company.name"/>
+                                <br/>
+                                <t t-esc="res_company.street"/>
+                                <br/>
+                                <span>
+                                    <t t-esc="res_company.city"/>,
+                                    <t t-esc="res_company.state_id.name"/> <t t-esc="res_company.zip"/>
+                                </span>
+                                <br/>
+                                <t t-esc="res_company.country_id.name"/>
+                                <br/>
+                            </p>
+                            <p>
+                                <t t-esc="doctor_name"/>
+                                <br/>
+                                <t t-esc="doctor_specialty"/>
+                                <br/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Report Header -->
+                <!-- Report Body -->
+                <div class="article">
+                    <!-- Doctor Activity -->
+                    <div class="text-center mb-4">
+                        <t t-if="doctor_activity">
+                            <h2>Activity</h2>
+                            <div>
+                                <table class="table table-bordered" style="width: 100%;">
+                                    <thead class="table-light">
+                                        <th class="text-center" style="width: 70%">Month</th>
+                                        <th class="text-center" style="width: 30%">Diagnoses</th>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="doctor_activity" t-as="year">
+                                            <tr class="table-info">
+                                                <td colspan="2">
+                                                    <t t-esc="year"/>
+                                                </td>
+                                            </tr>
+                                            <t t-foreach="doctor_activity[year]" t-as="month">
+                                                <tr class="table-secondary">
+                                                    <td>
+                                                        <t t-esc="month"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="doctor_activity[year][month]"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <h2 class="text-center">No activities</h2>
+                            <div class="text-center mb-2" style="border-top: 1px solid black;"/>
+                        </t>
+                    </div>
+                    <!-- End Doctor Activity -->
+                    <!-- Patients -->
+                    <div class="text-center">
+                        <t t-if="doctor_patients">
+                            <h2 class="text-center">Patients</h2>
+                            <table class="table table-bordered" style="width: 100%">
+                                <thead class="table-light">
+                                    <th class="text-center" style="width: 30%">Name</th>
+                                    <th class="text-center" style="width: 30%">Contact</th>
+                                    <th class="text-center" style="width: 20%">Age</th>
+                                    <th class="text-center" style="width: 40%">Diseases</th>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doctor_patients" t-as="patient">
+                                        <tr>
+                                            <td>
+                                                <span t-esc="patient['name']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="patient['phone']"/>
+                                                <br/>
+                                                <span t-esc="patient['email']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="patient['age']"/>
+                                            </td>
+                                            <td>
+                                                <t t-if="patient['diagnoses']">
+                                                    <ul class="list-unstyled">
+                                                        <li>
+                                                            <t t-foreach="patient['diagnoses']" t-as="diagnosis">
+                                                                <t t-if="diagnosis['level'] == 'low'" t-set="color" t-value="'success'"/>
+                                                                <t t-elif="diagnosis['level'] == 'medium'" t-set="color" t-value="'warning'"/>
+                                                                <t t-else="" t-set="color" t-value="'danger'"/>
+                                                                <div>
+                                                                    <span t-esc="diagnosis['disease_name']"/>
+                                                                    <span t-attf-class="text-{{color}}"> (<t t-esc="diagnosis['level']"/>)</span>
+                                                                </div>
+                                                            </t>
+                                                        </li>
+                                                    </ul>
+                                                </t>
+                                                <t t-else="">
+                                                    <span>-</span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-else="">
+                            <h2>No patients</h2>
+                        </t>
+                    </div>
+                    <!-- End Patients -->
+                </div>
+                <!-- End Report Body -->
+                <!-- Report Footer -->
+                <div class="footer h-10">
+                    <div class="text-center">
+                        <p class="mb-2">
+                            <t t-esc="res_company.phone"/> <t t-esc="res_company.email"/> <t t-esc="res_company.website"/>
+                        </p>
+                        <p class="mt-0 mb-2">
+                            <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                        </p>
+                    </div>
+                    <div class="text-center" style="border-top: 1px solid black;">
+                        <ul class="list-inline mb4">
+                            <li class="list-inline-item">Page:</li>
+                            <li class="list-inline-item">
+                                <span class="page"/>
+                            </li>
+                            <li class="list-inline-item">/</li>
+                            <li class="list-inline-item">
+                                <span class="topage"/>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- End Report Footer -->
+            </t>
+        </t>
+    </template>
+
+</odoo>

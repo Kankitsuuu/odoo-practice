@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hospital_patient_analysis_category_form" model="ir.ui.view">
+        <field name="name">hospital.patient.analysis.category.form</field>
+        <field name="model">hospital.patient.analysis.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hospital_patient_analysis_category_tree" model="ir.ui.view">
+        <field name="name">hospital.patient.analysis.category.tree</field>
+        <field name="model">hospital.patient.analysis.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hospital_patient_analysis_category" model="ir.actions.act_window">
+            <field name="name">Analysis categories</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hospital.patient.analysis.category</field>
+            <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_hospital_patient_analysis_categories"
+              name="Analysis categories"
+              parent="menu_hospital_info"
+              action="action_hospital_patient_analysis_category"
+              sequence="30"/>
+
+</odoo>

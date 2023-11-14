@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="doctor_report_wizard_view_form" model="ir.ui.view">
+        <field name="name">doctor.report.wizard.view.form</field>
+        <field name="model">doctor.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="doctor_id"/>
+                </group>
+                <footer>
+                    <button name="action_get_report"
+                            string="Get Report"
+                            type="object"
+                            class="btn-primary"/>
+                    <button special="cancel" class="oe_link" string="Close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="server_action_doctor_report_wizard" model="ir.actions.server">
+        <field name="name">Doctor Report</field>
+        <field name="model_id" ref="model_doctor_report_wizard"/>
+        <field name="binding_model_id" ref="model_hospital_doctor"/>
+        <field name="binding_type">report</field>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.action_open_wizard()
+        </field>
+    </record>
+
+    <menuitem id="menu_doctor_report_wizard"
+              name="Doctor report"
+              parent="menu_hospital_reports"
+              action="server_action_doctor_report_wizard"
+              sequence="20"/>
+
+</odoo>

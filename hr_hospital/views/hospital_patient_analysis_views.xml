@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hospital_patient_analysis_search" model="ir.ui.view">
+        <field name="name">hospital.patient.analysis.search</field>
+        <field name="model">hospital.patient.analysis</field>
+        <field name="arch" type="xml">
+           <search>
+               <field name="patient_id"
+                      filter_domain="[
+                      '|',
+                      ('patient_id.name', 'ilike', self),
+                      ('patient_id.surname', 'ilike', self)
+                      ]"/>
+               <field name="patient_phone"  filter_domain="[('patient_id.phone', '=', self)]"/>
+               <filter name="Ready" domain="[('is_ready', '=', True)]"/>
+               <filter name="Current month"
+                       domain="[
+                       ('sample_date', '&gt;=', context_today().strftime('%Y-%m-01')),
+                       ('sample_date', '&lt;', (context_today()+relativedelta(months=1)).strftime('%Y-%m-01'))
+                       ]"/>
+                <filter name="category_id" string="Category" icon="terp-partner" context="{'group_by':'category_id'}"/>
+           </search>
+        </field>
+    </record>
+
+    <record id="view_hospital_patient_analysis_kanban" model="ir.ui.view">
+        <field name="name">hospital.patient.analysis.kanban</field>
+        <field name="model">hospital.patient.analysis</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" default_group_by="category_id">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="patient_phone"/>
+                <field name="is_ready"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_details">
+                            <ul>
+                                <li>
+                                    Name: <field name="name"/>
+                                </li>
+                                <li>
+                                    Patient: <field name="patient_id"/>
+                                </li>
+                                <li attrs="{'invisible': [('patient_phone', '=', False)]}">
+                                    Phone: <field name="patient_phone"/>
+                                </li>
+                                <li attrs="{'invisible': [('is_ready', '=', False)]}">
+                                    <span style="color:green;">Ready</span>
+                                    <p style="margin-bottom: 0px; margin-top: 5px;">
+                                        <button name="action_open_analysis"
+                                                context="{'analysis_id': id}"
+                                                string="Open"
+                                                class="btn-primary"
+                                                type="object"/>
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_hospital_patient_analysis_pivot" model="ir.ui.view">
+        <field name="name">hospital.patient.analysis.pivot</field>
+        <field name="model">hospital.patient.analysis</field>
+        <field name="arch" type="xml">
+           <pivot display_quantity="1">
+               <field name="doctor_id" type="row" />
+               <field name="sample_date"
+                      type="row"
+                      interval="month"
+               />
+               <field name="category_id" type="col"/>
+           </pivot>
+        </field>
+    </record>
+
+    <record id="view_hospital_patient_analysis_form" model="ir.ui.view">
+        <field name="name">hospital.patient.analysis.form</field>
+        <field name="model">hospital.patient.analysis</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="category_id"/>
+                        <field name="patient_id"/>
+                        <field name="patient_phone"/>
+                        <field name="doctor_id"/>
+                        <field name="sample_date"/>
+                        <field name="is_ready"/>
+                        <field name="result" attrs="{'invisible': [('is_ready', '=', False)]}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hospital_patient_analysis_tree" model="ir.ui.view">
+        <field name="name">hospital.patient.analysis.tree</field>
+        <field name="model">hospital.patient.analysis</field>
+        <field name="arch" type="xml">
+            <tree expand="1">
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="patient_id"/>
+                <field name="sample_date"/>
+                <field name="is_ready"/>
+                <field name="patient_phone"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hospital_patient_analysis" model="ir.actions.act_window">
+            <field name="name">Patient analyses</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hospital.patient.analysis</field>
+            <field name="view_mode">tree,kanban,pivot,form</field>
+    </record>
+
+    <menuitem id="menu_hospital_patient_analyses"
+              name="Analyses"
+              parent="menu_hospital_patients"
+              action="action_hospital_patient_analysis"
+              sequence="20"/>
+
+</odoo>

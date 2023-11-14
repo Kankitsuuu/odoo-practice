@@ -3,11 +3,38 @@
 
     <menuitem id="menu_hospital_root"
               name="Hospital Management"
-              sequence="1"/>
+              web_icon="hospital,static/description/icon.png"
+              sequence="10"/>
 
-    <menuitem id="menu_hospital_operations"
-              name="Operations"
+    <menuitem id="menu_hospital_doctors"
+              name="Doctors"
               parent="menu_hospital_root"
-              sequence="1"/>
+              sequence="10"/>
+
+    <menuitem id="menu_hospital_patients"
+              name="Patients"
+              parent="menu_hospital_root"
+              sequence="20"/>
+
+    <menuitem id="menu_hospital_common"
+              name="Common"
+              parent="menu_hospital_root"
+              sequence="30"/>
+
+    <menuitem id="menu_hospital_info"
+              name="Info"
+              parent="menu_hospital_root"
+              sequence="40"/>
+
+    <menuitem id="menu_hospital_contact"
+              name="Contact"
+              parent="menu_hospital_root"
+              sequence="50"/>
+
+    <menuitem id="menu_hospital_reports"
+              name="Reports"
+              parent="menu_hospital_root"
+              sequence="60"/>
+
 
 </odoo>
